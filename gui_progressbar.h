@@ -8,6 +8,8 @@ class gui_progressbar : public gui_element
         gui_progressbar();
         virtual ~gui_progressbar();
 
+        virtual void init();
+
         virtual void draw();
 
         void set_value(float v);
@@ -15,7 +17,7 @@ class gui_progressbar : public gui_element
 
     protected:
     private:
-        static GLuint pb;
+        GLuint pb;
         float value;
 };
 

@@ -8,6 +8,8 @@ class gui_window : public gui_container
         gui_window();
         virtual ~gui_window();
 
+        virtual void init();
+
         virtual void draw();
 
         virtual bool take_input();
@@ -18,7 +20,7 @@ class gui_window : public gui_container
 
     protected:
     private:
-        static GLuint wbg;
+        GLuint wbg;
         bool vanish;
         bool has_vanished;
 };

@@ -3,11 +3,15 @@
 #include <gl\gl.h>
 #include <string>
 
+class gui;
+
 class gui_element
 {
     public:
         gui_element();
         virtual ~gui_element();
+
+        virtual void init();
 
         virtual void draw();
 
@@ -24,6 +28,7 @@ class gui_element
         virtual float get_size_y();
 
         void set_parent(gui_element* p);
+        virtual gui* get_parent_gui();
 
         virtual bool take_input();
 
@@ -33,8 +38,6 @@ class gui_element
         virtual void make_invisible();
 
         virtual int is_active();
-
-        static void use_theme(std::string t);
 
     protected:
         float size_x;
@@ -54,8 +57,7 @@ class gui_element
 
         gui_element* parent;
 
-        static GLuint load_texture(std::string f);
-        static std::string theme;
+        GLuint get_texture(std::string f);
 
     private:
 };

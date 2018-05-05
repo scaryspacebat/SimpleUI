@@ -8,6 +8,8 @@ class gui_hor_slider : public gui_element
         gui_hor_slider();
         virtual ~gui_hor_slider();
 
+        virtual void init();
+
         virtual void draw();
 
         virtual bool take_input();
@@ -17,7 +19,7 @@ class gui_hor_slider : public gui_element
 
     protected:
     private:
-        static GLuint st;
+        GLuint st;
         float value;
 };
 

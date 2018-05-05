@@ -9,6 +9,8 @@ public:
     {
         s=0;
         start=nullptr;
+        recent=0;
+        recentPtr=nullptr;
     };
     ~chain()
     {
@@ -22,6 +24,8 @@ public:
         s++;
         object* d=start;
         start=new object(t, d);
+        recent=0;
+        recentPtr=start;
         return;
     };
     void invert(){
@@ -30,6 +34,8 @@ public:
             set_data(i, get_data(s-i-1));
             set_data(s-i-1, dummy);
         }
+        recent=0;
+        recentPtr=start;
         return;
     }
     void append(T t)
@@ -42,6 +48,8 @@ public:
             for(int i=0; i<s-2; i++) d=d->get_next();
             d->set_next(new object(t));
         }
+        recent=0;
+        recentPtr=start;
         return;
     };
     void ins(T t, int i)
@@ -55,6 +63,8 @@ public:
             object* d2=d->get_next();
             d->set_next(new object(t, d2));
         }
+        recent=0;
+        recentPtr=start;
         return;
     }
     void del(int i)
@@ -76,15 +86,23 @@ public:
             delete d2;
             d->set_next(d3);
         }
+        recent=0;
+        recentPtr=start;
         return;
     };
     T get_data(int i)
     {
         if(0<=i && i<s)
         {
-            object* d=start;
-            for(int c=0; c<i; c++) d=d->get_next();
-            return d->get_data();
+            if(i<recent){
+                recent=0;
+                recentPtr=start;
+            }
+            while(recent<i){
+                recentPtr=recentPtr->get_next();
+                recent++;
+            }
+            return recentPtr->get_data();
         }
         else return nullptr;
     }
@@ -150,6 +168,8 @@ private:
     };
     int s;
     object* start;
+    int recent;
+    object* recentPtr;
 };
 
 #endif // CHAIN_H

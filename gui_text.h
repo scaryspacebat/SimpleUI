@@ -6,8 +6,10 @@
 class gui_text : public gui_element
 {
     public:
-        gui_text();
+        gui_text(std::string t="");
         virtual ~gui_text();
+
+        virtual void init();
 
         virtual void draw();
 
@@ -18,8 +20,8 @@ class gui_text : public gui_element
     protected:
     private:
         std::string text;
-        static GLuint f8_id;
-        static GLuint f16_id;
+        GLuint f8_id;
+        GLuint f16_id;
         int t_size;
 };
 

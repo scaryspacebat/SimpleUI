@@ -1,11 +1,10 @@
 #include "gui_window.h"
 #include "fssimplewindow.h"
 
-GLuint gui_window::wbg = 0;
-
 gui_window::gui_window() {
     //ctor
-    if(wbg==0) wbg=load_texture("window_bg.png");
+    wbg = 0;
+
     vanish=false;
     has_vanished=false;
 }
@@ -14,6 +13,11 @@ gui_window::~gui_window() {
     //dtor
 }
 
+void gui_window::init(){
+    if(wbg==0) wbg=get_texture("window_bg.png");
+    gui_container::init();
+    return;
+}
 
 void gui_window::draw() {
     if(visible==1) {
@@ -126,7 +130,6 @@ void gui_window::draw() {
 
 bool gui_window::take_input() {
     bool r=false;
-    int i=0;
     int mx,my,lb,mb,rb;
     FsGetMouseState(lb,mb,rb,mx,my);
 

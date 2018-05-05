@@ -1,11 +1,10 @@
 #include "gui_element.h"
 #include "lodepng.h"
-
+#include "log_manager.h"
+#include "gui.h"
 #include <iostream>
 
 using namespace std;
-
-string gui_element::theme="default";
 
 gui_element::gui_element()
 {
@@ -31,6 +30,11 @@ gui_element::gui_element()
 gui_element::~gui_element()
 {
     //dtor
+}
+
+void gui_element::init(){
+
+    return;
 }
 
 void gui_element::draw(){
@@ -91,6 +95,11 @@ void gui_element::set_parent(gui_element* p){
     return;
 }
 
+gui* gui_element::get_parent_gui(){
+    if(parent!=nullptr) return parent->get_parent_gui();
+    return nullptr;
+}
+
 bool gui_element::take_input(){
     return false;
 }
@@ -124,12 +133,21 @@ int gui_element::is_active(){
     }
 }
 
-GLuint gui_element::load_texture(std::string f) {
+GLuint gui_element::get_texture(std::string f) {
+    gui* g=get_parent_gui();
+    if(g==nullptr){
+        log_manager::write_log("unable to find parent GUI to load "+f);
+        return 0;
+    }
+    else return get_parent_gui()->load_texture(f);
+    /*
     GLuint tid;
     vector<unsigned char> image;
     unsigned width, height;
+    log_manager::write_log("loading texture from gui/"+theme+"/"+f);
     lodepng::decode(image, width, height, "gui/"+theme+"/"+f);
     if(image.size()==0){
+        log_manager::write_log("Unable to load texture from gui/"+theme+"/"+f);
         lodepng::decode(image, width, height, "gui/default/"+f);
     }
 
@@ -161,10 +179,5 @@ GLuint gui_element::load_texture(std::string f) {
     glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-    return tid;
-}
-
-void gui_element::use_theme(string t){
-    theme=t;
-    return;
+    */
 }

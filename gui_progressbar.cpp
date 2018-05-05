@@ -1,18 +1,23 @@
 #include "gui_progressbar.h"
 
-GLuint gui_progressbar::pb = 0;
 
 gui_progressbar::gui_progressbar()
 {
     //ctor
     value=0.0;
     size_y=16;
-    if(pb==0) pb=load_texture("progressbar.png");
+
+    pb = 0;
 }
 
 gui_progressbar::~gui_progressbar()
 {
     //dtor
+}
+
+void gui_progressbar::init(){
+    if(pb==0) pb=get_texture("progressbar.png");
+    return;
 }
 
 void gui_progressbar::draw() {

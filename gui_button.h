@@ -8,6 +8,8 @@ class gui_button : public gui_container
         gui_button();
         virtual ~gui_button();
 
+        virtual void init();
+
         virtual void draw();
 
         virtual bool take_input();
@@ -22,8 +24,8 @@ class gui_button : public gui_container
 
     protected:
     private:
-        static GLuint bt;
-        static GLuint bpt;
+        GLuint bt;
+        GLuint bpt;
 
         int state;
 

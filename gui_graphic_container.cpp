@@ -1,21 +1,26 @@
 #include "gui_graphic_container.h"
 
-GLuint gui_graphic_container::cst1 = 0;
-GLuint gui_graphic_container::cst2 = 0;
-GLuint gui_graphic_container::cst3 = 0;
 
 gui_graphic_container::gui_graphic_container()
 {
     //ctor
-    if(cst1==0) cst1 = load_texture("container_bg_1.png");
-    if(cst2==0) cst2 = load_texture("container_bg_2.png");
-    if(cst3==0) cst3 = load_texture("container_bg_3.png");
+    cst1 = 0;
+    cst2 = 0;
+    cst3 = 0;
+
     style = 1;
 }
 
 gui_graphic_container::~gui_graphic_container()
 {
     //dtor
+}
+
+void gui_graphic_container::init(){
+    if(cst1==0) cst1 = get_texture("container_bg_1.png");
+    if(cst2==0) cst2 = get_texture("container_bg_2.png");
+    if(cst3==0) cst3 = get_texture("container_bg_3.png");
+    gui_container::init();
 }
 
 void gui_graphic_container::draw() {

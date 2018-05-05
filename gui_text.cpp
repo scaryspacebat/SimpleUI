@@ -1,21 +1,22 @@
 #include "gui_text.h"
 #include <cmath>
 
-GLuint gui_text::f8_id = 0;
-GLuint gui_text::f16_id = 0;
-
-gui_text::gui_text()
-{
+gui_text::gui_text(std::string t): text(t) {
     //ctor
-    text="";
     t_size=8;
-    if(f8_id==0) f8_id=load_texture("font-8.png");
-    if(f16_id==0) f16_id=load_texture("font-16.png");
+
+    f8_id = 0;
+    f16_id = 0;
 }
 
-gui_text::~gui_text()
-{
+gui_text::~gui_text() {
     //dtor
+}
+
+void gui_text::init() {
+    if(f8_id==0) f8_id=get_texture("font-8.png");
+    if(f16_id==0) f16_id=get_texture("font-16.png");
+    return;
 }
 
 void gui_text::draw() {
@@ -32,7 +33,7 @@ void gui_text::draw() {
 
         glBegin(GL_QUADS);
 
-        for(int i=0; i<text.length(); i++){
+        for(int i=0; i<text.length(); i++) {
             char d = text[i];
             float x=d%16;
             float y=floor(d/16);
@@ -55,13 +56,13 @@ void gui_text::draw() {
     return;
 }
 
-void gui_text::set_text(std::string t){
+void gui_text::set_text(std::string t) {
     text=t;
     return;
 }
 
-void gui_text::set_text_size(int s){
-    if(s==8 || s==16){
+void gui_text::set_text_size(int s) {
+    if(s==8 || s==16) {
         t_size=s;
     }
     return;

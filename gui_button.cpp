@@ -1,14 +1,12 @@
 #include "gui_button.h"
 #include "fssimplewindow.h"
 
-GLuint gui_button::bt = 0;
-GLuint gui_button::bpt = 0;
-
 gui_button::gui_button() {
     //ctor
     state=0;
-    if(bt==0) bt = load_texture("button.png");
-    if(bpt==0) bpt = load_texture("button_pressed.png");
+
+    bt=0;
+    bpt=0;
 
     off_x=0;
     off_y=2;
@@ -16,6 +14,13 @@ gui_button::gui_button() {
 
 gui_button::~gui_button() {
     //dtor
+}
+
+void gui_button::init(){
+    if(bt==0) bt = get_texture("button.png");
+    if(bpt==0) bpt = get_texture("button_pressed.png");
+    gui_container::init();
+    return;
 }
 
 void gui_button::draw() {
@@ -154,20 +159,18 @@ bool gui_button::take_input() {
     } else {
         state=0;
     }
+
     if(mx>=get_abs_pos_x() && mx<=get_abs_pos_x()+get_size_x() && my>=get_abs_pos_y() && my<=get_abs_pos_y()+get_size_y() && visible){
         return true;
     }
     else{
         return false;
     }
+    return false;
 }
 
 int gui_button::get_state() {
-    if(is_active()) {
-        return state;
-    } else {
-        return 0;
-    }
+    return state;
 }
 
 /*

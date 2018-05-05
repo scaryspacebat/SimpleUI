@@ -1,19 +1,23 @@
 #include "gui_hor_slider.h"
 #include "fssimplewindow.h"
 
-GLuint gui_hor_slider::st = 0;
 
 gui_hor_slider::gui_hor_slider() {
     //ctor
     value=1.0;
     size_y=16;
-    if(st==0) st=load_texture("slider.png");
+
+    st = 0;
 }
 
 gui_hor_slider::~gui_hor_slider() {
     //dtor
 }
 
+void gui_hor_slider::init(){
+    if(st==0) st=get_texture("slider.png");
+    return;
+}
 
 void gui_hor_slider::draw() {
     if(visible==1) {

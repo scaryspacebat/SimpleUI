@@ -20,7 +20,7 @@ gui_graphic::~gui_graphic() {
 }
 
 void gui_graphic::draw() {
-    if(visible==1) {
+    if(visible==1 && loaded==true) {
         if(active==1) {
             glColor3f(1, 1, 1);
         } else {
@@ -61,6 +61,7 @@ void gui_graphic::draw() {
 
 void gui_graphic::set_texture(GLuint t) {
     tex=t;
+    loaded=true;
     return;
 }
 
@@ -71,6 +72,7 @@ void gui_graphic::set_graphic_size(int x, int y) {
 }
 
 void gui_graphic::load_from_file(std::string filename){
+    loaded=true;
     std::vector<unsigned char> image;
     unsigned width, height;
     lodepng::decode(image, width, height, filename);
@@ -98,6 +100,8 @@ void gui_graphic::load_from_file(std::string filename){
             image[x*4+y*width*4+3]=a;
         }
     }
+
+    // unless tex==0 unload the texture first?
 
     glEnable(GL_TEXTURE_2D);
     glGenTextures(1, &tex);

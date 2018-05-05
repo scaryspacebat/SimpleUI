@@ -1,4 +1,8 @@
 #include "gui_container.h"
+#include "log_manager.h"
+#include <iostream>
+
+using namespace std;
 
 gui_container::gui_container()
 {
@@ -10,6 +14,13 @@ gui_container::gui_container()
 gui_container::~gui_container()
 {
     //dtor
+}
+
+void gui_container::init(){
+    for(int i=0; i<content.get_size(); i++){
+        content.get_data(i)->init();
+    }
+    return;
 }
 
 void gui_container::draw(){

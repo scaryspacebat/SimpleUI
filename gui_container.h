@@ -9,6 +9,8 @@ class gui_container : public gui_element
         gui_container();
         virtual ~gui_container();
 
+        virtual void init();
+
         virtual void draw();
 
         virtual bool take_input();
