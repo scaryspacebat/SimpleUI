@@ -1,16 +1,21 @@
 #include "gui.h"
+
 #include "lodepng.h"
-#include "log_manager.h"
+#include "log.h"
+
 #include <iostream>
 
-using namespace std;
 
-
-gui::gui(string t): theme(t) {
+gui::gui(std::string t): theme(t) {
     //ctor
+    log::writeToLog("Creating GUI");
+    log::addTab();
     tid=0;
     ui_rec=false;
     bg_visible=true;
+    log::removeTab();
+    log::writeToLog("Finished Creating GUI");
+    log::nextLine();
 }
 
 gui::~gui() {
@@ -21,19 +26,23 @@ gui::~gui() {
 }
 
 void gui::init() {
+    log::writeToLog("Initiating GUI");
+    log::addTab();
     if(tid==0) tid = get_texture("background.png");
     gui_container::init();
+    log::removeTab();
+    log::writeToLog("Finished initiating GUI");
+    log::nextLine();
     return;
 }
 
 void gui::draw() {
-    glViewport(0,0,size_x,size_y);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0,(float)size_x-1,(float)size_y-1,0,-1,1);
-
-    ui_rec=gui_container::take_input();
     gui_container::draw();
+    return;
+}
+
+void gui::update(){
+    ui_rec=gui_container::take_input();
     return;
 }
 
@@ -90,13 +99,14 @@ gui* gui::get_parent_gui() {
 
 void gui::setTheme(string t) {
     theme=t;
+    log::writeToLog("Setting theme "+t);
     return;
 }
 
 GLuint gui::load_texture(string f) {
     for(int i=0; i<texture_list.get_size(); i++) {
         if(texture_list.get_data(i)->filename==f){ // found an already loaded texture
-            log_manager::write_log("found an already loaded texture for "+f);
+            log::writeToLog("found an already loaded texture for "+f, 3);
             return texture_list.get_data(i)->id;
         }
     }
@@ -104,10 +114,10 @@ GLuint gui::load_texture(string f) {
     GLuint tid;
     vector<unsigned char> image;
     unsigned width, height;
-    log_manager::write_log("loading texture from gui/"+theme+"/"+f);
+    log::writeToLog("loading texture from gui/"+theme+"/"+f, 2);
     lodepng::decode(image, width, height, "gui/"+theme+"/"+f);
     if(image.size()==0) {
-        log_manager::write_log("Unable to load texture from gui/"+theme+"/"+f);
+        log::writeToLog("Unable to load texture from gui/"+theme+"/"+f, -1);
         lodepng::decode(image, width, height, "gui/default/"+f);
     }
 

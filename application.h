@@ -1,17 +1,8 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
-#include <string>
 
 #include "gui.h"
-#include "gui_window.h"
-#include "gui_text.h"
-#include "gui_button.h"
-#include "gui_graphic_container.h"
-#include "gui_graphic.h"
-#include "gui_progressbar.h"
-#include "guicheckbox.h"
-
-using namespace std;
+#include "soundspace.h"
 
 class application
 {
@@ -25,24 +16,29 @@ class application
 
         void set_size(int x, int y);
 
-        void loop();
+        void run();
 
         virtual void main_loop();
 
         int get_state();
 
+        void setMode(int m);
+
+        void setState(int s);
+
     protected:
         int size_x;
         int size_y;
 
-        int state;
-
         gui Gui;
+        soundspace audio;
 
         void setVerticalFOV(double f);
 
     private:
         double fovy;
+        int mode;
+        int state;
 };
 
 #endif // APPLICATION_H

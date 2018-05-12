@@ -15,6 +15,8 @@ class gui : public gui_container
 
         virtual void draw();
 
+        void update();
+
         void drawBackground();
 
         virtual float get_abs_pos_x();

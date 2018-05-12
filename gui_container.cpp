@@ -1,8 +1,9 @@
 #include "gui_container.h"
-#include "log_manager.h"
+
+#include "log.h"
+
 #include <iostream>
 
-using namespace std;
 
 gui_container::gui_container()
 {

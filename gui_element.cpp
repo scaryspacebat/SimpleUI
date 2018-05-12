@@ -1,10 +1,10 @@
 #include "gui_element.h"
-#include "lodepng.h"
-#include "log_manager.h"
-#include "gui.h"
-#include <iostream>
 
-using namespace std;
+#include "lodepng.h"
+#include "log.h"
+#include "gui.h"
+
+#include <iostream>
 
 gui_element::gui_element()
 {
@@ -136,7 +136,7 @@ int gui_element::is_active(){
 GLuint gui_element::get_texture(std::string f) {
     gui* g=get_parent_gui();
     if(g==nullptr){
-        log_manager::write_log("unable to find parent GUI to load "+f);
+        log::writeToLog("unable to find parent GUI to load "+f, -1);
         return 0;
     }
     else return get_parent_gui()->load_texture(f);

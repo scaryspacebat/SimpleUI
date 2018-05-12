@@ -1,11 +1,19 @@
+#include "application.h"
+
+#include "log.h"
+#include "fssimplewindow.h"
+#include "log.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <thread>
 #ifdef WIN32
 #include <windows.h>
 #endif
-
 #ifndef MACOSX
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -14,50 +22,48 @@
 #include <OpenGL/glu.h>
 #endif
 
-#include "application.h"
-#include "log_manager.h"
-#include "fssimplewindow.h"
-#include "log_manager.h"
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <thread>
-
-using namespace std;
-
-application::application() {
+application::application()
+{
     //ctor
-    log_manager::write_log("Initiating application.");
-    size_x=800;
-    size_y=600;
+    log::writeToLog("Initiating application.");
+    log::addTab();
+
+    set_size(800, 600);
 
     setVerticalFOV(45);
 
     state=0;
 
+    mode=0;
+
     init_window();
 
-    Gui.set_size(size_x, size_y);
     Gui.set_bg_visibility(true);
 
-    log_manager::write_log("Finished initiating application.");
+    log::removeTab();
+    log::writeToLog("Finished initiating application");
+    log::nextLine();
 }
 
-application::~application() {
+application::~application()
+{
     //dtor
+    log::writeToLog("Terminating Application");
 }
 
-void application::init() {
+void application::init()
+{
 
     return;
 }
 
-void application::init_window() {
-    log_manager::write_log("Creating window");
+void application::init_window()
+{
+    log::writeToLog("Creating window");
     FsOpenWindow(32,32,size_x,size_y,1); // 800x600 pixels, useDoubleBuffer=1
 
-    log_manager::write_log("Initiating OpenGL");
+    log::writeToLog("Initiating OpenGL");
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
     glDepthFunc(GL_ALWAYS);
@@ -82,8 +88,11 @@ void application::init_window() {
     return;
 }
 
-void application::set_size(int x, int y) {
-    if(x!=size_x || y!=size_y) {
+void application::set_size(int x, int y)
+{
+    if(x!=size_x || y!=size_y)
+    {
+        log::writeToLog("Setting application size to "+std::to_string(x)+" x "+std::to_string(y));
         size_x=x;
         size_y=y;
         Gui.set_size(size_x, size_y);
@@ -91,12 +100,20 @@ void application::set_size(int x, int y) {
     return;
 }
 
-void application::loop() {
-    log_manager::write_log("Initiating GUI");
+void application::run()
+{
     Gui.init();
+    audio.init();
 
-    while(get_state()==0) {
+    log::writeToLog("Entering main loop");
+    log::nextLine();
+
+    while(get_state()==0)
+    {
         FsPollDevice();
+
+        Gui.update();
+        audio.update();
 
         int wid,hei;
         FsGetWindowSize(wid,hei);
@@ -112,12 +129,15 @@ void application::loop() {
 
         Gui.drawBackground();
 
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        //glFrustum(-1, 1, -1, 1, 0.1, 1000);
-        gluPerspective(fovy, static_cast<float>(size_x)/static_cast<float>(size_y), 0.1, 1000);
+        if(mode==3)
+        {
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LEQUAL);
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            //glFrustum(-1, 1, -1, 1, 0.1, 1000);
+            gluPerspective(fovy, static_cast<float>(size_x)/static_cast<float>(size_y), 0.1, 1000);
+        }
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         main_loop();
@@ -140,17 +160,30 @@ void application::loop() {
     return;
 }
 
-void application::main_loop() {
+void application::main_loop()
+{
 
     return;
 }
 
-int application::get_state() {
+int application::get_state()
+{
     return state;
 }
 
-void application::setVerticalFOV(double f){
+void application::setVerticalFOV(double f)
+{
     fovy=f;
     return;
 }
 
+void application::setMode(int m)
+{
+    mode=m;
+    return;
+}
+
+void application::setState(int s){
+    state=s;
+    return;
+}
