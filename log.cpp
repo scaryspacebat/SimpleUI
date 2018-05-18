@@ -17,10 +17,11 @@ void log::writeToLog(std::string out, int lvl)
     {
         if(start)
         {
+            start=false;
             file.open("logs/log.txt", std::ios::out | std::ios::trunc);
             writeLine("Starting log.txt at ");
-            writeLine("Using SimpleUI v."+std::string(SimpleUIVersion::FULLVERSION_STRING));
-            start=false;
+            writeLine("Using SimpleUI v"+std::string(SimpleUIVersion::FULLVERSION_STRING));
+            nextLine();
         }
         else
         {

@@ -28,6 +28,7 @@ private:
     double getAmplitude(double t, int c);
 
     int sps;
+    int bps;
 
     double volume;
 

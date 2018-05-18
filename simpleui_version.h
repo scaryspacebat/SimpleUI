@@ -4,7 +4,7 @@
 namespace SimpleUIVersion{
 	
 	//Date Version Types
-	static const char DATE[] = "12";
+	static const char DATE[] = "17";
 	static const char MONTH[] = "05";
 	static const char YEAR[] = "2018";
 	static const char UBUNTU_VERSION_STYLE[] =  "18.05";
@@ -16,17 +16,17 @@ namespace SimpleUIVersion{
 	//Standard Version Type
 	static const long MAJOR  = 1;
 	static const long MINOR  = 0;
-	static const long BUILD  = 42;
-	static const long REVISION  = 259;
+	static const long BUILD  = 75;
+	static const long REVISION  = 436;
 	
 	//Miscellaneous Version Types
-	static const long BUILDS_COUNT  = 47;
-	#define RC_FILEVERSION 1,0,42,259
-	#define RC_FILEVERSION_STRING "1, 0, 42, 259\0"
-	static const char FULLVERSION_STRING [] = "1.0.42.259";
+	static const long BUILDS_COUNT  = 86;
+	#define RC_FILEVERSION 1,0,75,436
+	#define RC_FILEVERSION_STRING "1, 0, 75, 436\0"
+	static const char FULLVERSION_STRING [] = "1.0.75.436";
 	
 	//These values are to keep track of your versioning state, don't modify them.
-	static const long BUILD_HISTORY  = 42;
+	static const long BUILD_HISTORY  = 75;
 	
 
 }

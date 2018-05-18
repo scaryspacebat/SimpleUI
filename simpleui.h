@@ -22,6 +22,7 @@ simpleui.a has to be linked before any OpenGL libraries.
 #include "gui_text.h"
 #include "gui_window.h"
 #include "gui_window_accessoire.h"
+#include "guicheckbox.h"
 
 #include "lodepng.h"
 #include "log.h"

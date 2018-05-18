@@ -2,7 +2,6 @@
 
 #include "log.h"
 #include "fssimplewindow.h"
-#include "log.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
+#include <chrono>
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -23,13 +23,15 @@
 #endif
 
 
-application::application()
+application::application() : sizeX("SizeX", 800), sizeY("SizeY", 600), theme("Theme", "default")
 {
     //ctor
     log::writeToLog("Initiating application.");
     log::addTab();
 
-    set_size(800, 600);
+    addSetting(&sizeX);
+    addSetting(&sizeY);
+    addSetting(&theme);
 
     setVerticalFOV(45);
 
@@ -37,7 +39,7 @@ application::application()
 
     mode=0;
 
-    init_window();
+    setMeasurementSize(200);
 
     Gui.set_bg_visibility(true);
 
@@ -50,6 +52,7 @@ application::~application()
 {
     //dtor
     log::writeToLog("Terminating Application");
+    saveSettingsToFile("settings.txt");
 }
 
 void application::init()
@@ -95,6 +98,8 @@ void application::set_size(int x, int y)
         log::writeToLog("Setting application size to "+std::to_string(x)+" x "+std::to_string(y));
         size_x=x;
         size_y=y;
+        sizeX.setIntegerValue(x);
+        sizeY.setIntegerValue(y);
         Gui.set_size(size_x, size_y);
     }
     return;
@@ -102,6 +107,20 @@ void application::set_size(int x, int y)
 
 void application::run()
 {
+    loadSettingsFromFile("settings.txt");
+
+    set_size(sizeX.getIntegerValue(), sizeY.getIntegerValue());
+    Gui.setTheme(theme.getStringValue());
+
+    init_window();
+
+    log::writeToLog("Initiating application");
+    log::addTab();
+    init();
+    log::removeTab();
+    log::writeToLog("Finished initiating application");
+    log::nextLine();
+
     Gui.init();
     audio.init();
 
@@ -110,10 +129,20 @@ void application::run()
 
     while(get_state()==0)
     {
+        auto start = std::chrono::steady_clock::now();
         FsPollDevice();
 
         Gui.update();
+
+        auto gupdate = std::chrono::steady_clock::now();
+
         audio.update();
+
+        auto aupdate = std::chrono::steady_clock::now();
+        aDur.push_front(std::chrono::duration_cast<std::chrono::duration<double>>(aupdate - gupdate).count());
+        while(aDur.size()>measurement_size){
+            aDur.pop_back();
+        }
 
         int wid,hei;
         FsGetWindowSize(wid,hei);
@@ -142,6 +171,13 @@ void application::run()
         glLoadIdentity();
         main_loop();
 
+        auto mupdate = std::chrono::steady_clock::now();
+
+        mlDur.push_front(std::chrono::duration_cast<std::chrono::duration<double>>(mupdate - aupdate).count());
+        while(mlDur.size()>measurement_size){
+            mlDur.pop_back();
+        }
+
 
         glDisable(GL_DEPTH_TEST);
         glDepthFunc(GL_ALWAYS);
@@ -156,6 +192,12 @@ void application::run()
 
         FsSwapBuffers();
         //FsSleep(10);
+
+        auto finish = std::chrono::steady_clock::now();
+        frameDur.push_front(std::chrono::duration_cast<std::chrono::duration<double>>(finish - start).count());
+        while(frameDur.size()>measurement_size){
+            frameDur.pop_back();
+        }
     }
     return;
 }
@@ -186,4 +228,30 @@ void application::setMode(int m)
 void application::setState(int s){
     state=s;
     return;
+}
+
+void application::setMeasurementSize(int m){
+    measurement_size=m;
+    return;
+}
+
+double application::getFPS(){
+    if (frameDur.size()==0) return 0;
+    double r=0;
+    for (auto const& i : frameDur)  r+=i;
+    return 1.0f/(r/frameDur.size());
+}
+
+double application::getMainLoopDuration(){
+    if (mlDur.size()==0) return 0;
+    double r=0;
+    for (auto const& i : mlDur)  r+=i;
+    return r/mlDur.size();
+}
+
+double application::getAudioUpdateDuration(){
+    if (aDur.size()==0) return 0;
+    double r=0;
+    for (auto const& i : aDur)  r+=i;
+    return r/aDur.size();
 }

@@ -3,8 +3,16 @@
 
 #include "gui.h"
 #include "soundspace.h"
+#include "hasSettings.h"
+#include "setting.h"
+#include "settingInteger.h"
+#include "settingString.h"
+#include "settingBoolean.h"
+#include "settingDouble.h"
 
-class application
+#include <list>
+
+class application : public hasSettings
 {
     public:
         application();
@@ -26,9 +34,20 @@ class application
 
         void setState(int s);
 
+        void setMeasurementSize(int m);
+
+        double getFPS();
+
+        double getMainLoopDuration();
+        double getAudioUpdateDuration();
+
     protected:
+        settingInteger sizeX;
+        settingInteger sizeY;
         int size_x;
         int size_y;
+
+        settingString theme;
 
         gui Gui;
         soundspace audio;
@@ -39,6 +58,14 @@ class application
         double fovy;
         int mode;
         int state;
+
+        int measurement_size;
+
+        std::list<double> frameDur;
+        std::list<double> mlDur;
+        std::list<double> aDur;
+
+
 };
 
 #endif // APPLICATION_H
