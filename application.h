@@ -26,7 +26,7 @@ class application : public hasSettings
 
         void run();
 
-        virtual void main_loop();
+        virtual void main_loop(double dTime)=0;
 
         int get_state();
 

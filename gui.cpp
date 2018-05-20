@@ -14,7 +14,6 @@ gui::gui(std::string t): theme(t) {
     ui_rec=false;
     bg_visible=true;
     log::removeTab();
-    log::writeToLog("Finished Creating GUI");
     log::nextLine();
 }
 
@@ -31,7 +30,6 @@ void gui::init() {
     if(tid==0) tid = get_texture("background.png");
     gui_container::init();
     log::removeTab();
-    log::writeToLog("Finished initiating GUI");
     log::nextLine();
     return;
 }
@@ -114,7 +112,7 @@ GLuint gui::load_texture(string f) {
     GLuint tid;
     vector<unsigned char> image;
     unsigned width, height;
-    log::writeToLog("loading texture from gui/"+theme+"/"+f, 2);
+    log::writeToLog("loading texture from gui/"+theme+"/"+f, 3);
     lodepng::decode(image, width, height, "gui/"+theme+"/"+f);
     if(image.size()==0) {
         log::writeToLog("Unable to load texture from gui/"+theme+"/"+f, -1);

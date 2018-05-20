@@ -127,6 +127,10 @@ void application::run()
     log::writeToLog("Entering main loop");
     log::nextLine();
 
+
+    auto previousFrame = std::chrono::steady_clock::now();
+    auto currentFrame = std::chrono::steady_clock::now();
+
     while(get_state()==0)
     {
         auto start = std::chrono::steady_clock::now();
@@ -169,7 +173,11 @@ void application::run()
         }
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        main_loop();
+
+
+        currentFrame=std::chrono::steady_clock::now();
+        main_loop(std::chrono::duration_cast<std::chrono::duration<double>>(currentFrame-previousFrame).count());
+        previousFrame=currentFrame;
 
         auto mupdate = std::chrono::steady_clock::now();
 
@@ -199,12 +207,6 @@ void application::run()
             frameDur.pop_back();
         }
     }
-    return;
-}
-
-void application::main_loop()
-{
-
     return;
 }
 
