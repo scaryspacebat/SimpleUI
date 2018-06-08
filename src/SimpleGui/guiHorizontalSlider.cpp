@@ -20,7 +20,7 @@ void GuiHorizontalSlider::init() {
 }
 
 void GuiHorizontalSlider::render() {
-        glTranslatef( getAbsPosX(), getAbsPosY(), 0 );
+        glTranslatef( getRelPosX(), getRelPosY(), 0 );
 
         glBindTexture( GL_TEXTURE_2D, st );
 
@@ -122,8 +122,8 @@ void GuiHorizontalSlider::render() {
 
 bool GuiHorizontalSlider::acceptInput(int mx, int my, int lb, int mb, int rb) {
     bool r=GuiIsSolid::acceptInput( mx, my, lb, mb, rb );
-    if( r ) {
-        f_value=( mx-getAbsPosX()-8 )/( getAbsPosX()-16 );
+    if( r && lb>0 ) {
+        f_value=( mx-getAbsPosX()-8 )/( getSizeX()-16 );
     }
 
     if( f_value>1 )

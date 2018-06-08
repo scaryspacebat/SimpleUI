@@ -35,6 +35,7 @@ public:
     virtual void deactivate();
     virtual void makeVisible();
     virtual void makeInvisible();
+    virtual void toggleVisibillity();
 
     virtual bool isActive();
     virtual bool isVisible();

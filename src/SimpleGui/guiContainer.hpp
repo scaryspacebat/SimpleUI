@@ -18,6 +18,7 @@ public:
     virtual bool assessInput( int mx, int my, int lb, int mb, int rb );
 
     void addElement( GuiElement* new_el );
+    bool removeElement( GuiElement* el);
 
     float getAnchorPointX();
     float getAnchorPointY();

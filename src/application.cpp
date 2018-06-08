@@ -187,6 +187,7 @@ void ApplicationBase::run() {
         glOrtho( 0, static_cast<float>( width-1 ), static_cast<float>( height-1 ), 0, -1, 1 );
         glMatrixMode( GL_MODELVIEW );
         glLoadIdentity();
+
         gf_gui.draw();
 
         glFlush();

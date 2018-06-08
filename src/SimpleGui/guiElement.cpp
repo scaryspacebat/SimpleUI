@@ -174,6 +174,11 @@ void GuiElement::makeInvisible() {
     return;
 }
 
+void GuiElement::toggleVisibillity(){
+    b_visible=!b_visible;
+    return;
+}
+
 bool GuiElement::isActive() {
     if( b_active==true && b_visible==true )
         return true;
